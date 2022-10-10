@@ -1,0 +1,57 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.aliyun.com/repository/central' }
+    }
+}
+
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
+
+group = 'com.wejuai'
+version = '1.0.2'
+sourceCompatibility = '11'
+description = 'Wejuai Core Dto'
+
+[compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
+
+repositories {
+    mavenLocal()
+    maven { url 'https://maven.aliyun.com/repository/central' }
+    maven { url 'https://maven.pkg.github.com/EndOfMaster/maven-repo' }
+    maven {
+        url 'https://maven.pkg.github.com/wejuai/maven-repo'
+        credentials {
+            username = project.findProperty("githubUser") ?: System.getenv("githubUser")
+            password = project.findProperty("githubKey") ?: System.getenv("githubKey")
+        }
+    }
+}
+dependencies {
+    compileOnly 'com.wejuai:wejuai-entity:1.0.7'
+    compileOnly 'io.springfox:springfox-swagger2:3.0.0'
+    compileOnly 'org.apache.commons:commons-lang3:3.1'
+    compileOnly 'org.springframework.data:spring-data-commons:2.3.4.RELEASE'
+    compileOnly 'com.fasterxml.jackson.core:jackson-databind:2.12.0'
+    compileOnly 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.12.0'
+    compileOnly 'jakarta.validation:jakarta.validation-api:2.0.2'
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/EndOfMaster/maven-repo")
+            credentials {
+                username = project.findProperty("githubUser") ?: System.getenv("githubUser")
+                password = project.findProperty("githubKey") ?: System.getenv("githubKey")
+            }
+        }
+    }
+    publications {
+        gpr(MavenPublication) {
+            from(components.java)
+        }
+    }
+}
