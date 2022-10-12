@@ -19,7 +19,13 @@ description = 'Wejuai Core Dto'
 repositories {
     mavenLocal()
     maven { url 'https://maven.aliyun.com/repository/central' }
-    maven { url 'https://maven.pkg.github.com/EndOfMaster/maven-repo' }
+    maven {
+        url 'https://maven.pkg.github.com/EndOfMaster/maven-repo'
+        credentials {
+            username = project.findProperty("githubUser") ?: System.getenv("githubUser")
+            password = project.findProperty("githubKey") ?: System.getenv("githubKey")
+        }
+    }
     maven {
         url 'https://maven.pkg.github.com/wejuai/maven-repo'
         credentials {
@@ -42,7 +48,7 @@ publishing {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/EndOfMaster/maven-repo")
+            url = uri("https://maven.pkg.github.com/wejuai/maven-repo")
             credentials {
                 username = project.findProperty("githubUser") ?: System.getenv("githubUser")
                 password = project.findProperty("githubKey") ?: System.getenv("githubKey")
